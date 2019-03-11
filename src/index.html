@@ -9,37 +9,64 @@
 		margin: 0;
 		padding: 0;
 		cursor: default;
-		user-select: none;
 		box-sizing: border-box;
 		font-family: -apple-system;
+
+		user-select: none;
+		-webkit-user-select: none;
+		-webkit-touch-callout: none; 
 	}
 
 	html {
 		background-color: transparent;
+		margin: 40px 16px;
+		position: fixed;
+	}
+
+	ul {
+		list-style: none;
+	}
+
+	li {
+		padding: 8px;
+		margin-bottom: 8px;
+		border-radius: 6px;
+		width: calc(100vw - 32px);
+	}
+
+	li:active {
+		background-color: rgba(29,154,248,.46);
 	}
 
 	</style>
 
 	<body>
-		<p>Symbols: <span id="output">0</span></p>
-		<button onclick="getSymbolCount()">Update</button>
-
-		<hr>
-
-		<p id="log">
+		<ul id="list"></ul>
 	</body>
 
 	<script type="text/javascript">
-		window.updateOutput = function (n) {
-			document.getElementById('output').innerHTML = n
+		window.list = function (item) {
+			const symbol = item.split(',')
+			const name = symbol[0]
+			const id = symbol[1]
+
+			appendToList(name, id)
 		}
 
-		window.log = function (message) {
-			document.getElementById('log').innerHTML = message
+		function appendToList (name, id) {
+			const list = document.getElementById('list')
+			const listItem = document.createElement('li')
+			const textNode = document.createTextNode(name)
+
+			listItem.appendChild(textNode)
+			listItem.setAttribute('data-ID', id)
+			listItem.setAttribute('onclick', 'insert(this)')
+
+			list.appendChild(listItem)
 		}
 
-		function getSymbolCount() {
-			window.postMessage('requestSymbolCount', 'Requesting...')
+		function insert (el) {
+			window.postMessage('symbolClicked', el.getAttribute('data-ID'))
 		}
 	</script>
 </html>
