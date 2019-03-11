@@ -1,7 +1,11 @@
 import sketch from 'sketch'
 import BrowserWindow from 'sketch-module-web-view'
 
-function Dropbear () {
+function Dropbear (context) {
+
+	const document = sketch.fromNative(context.document)
+	const symbols = document.getSymbols()
+
 	const options = {
 		identifier: 'com.mlgrto.Dropbear',
 		alwaysOnTop: true,
@@ -11,14 +15,8 @@ function Dropbear () {
 
 	browserWindow.loadURL(require('./index.html'))
 
-	browserWindow.webContents
-		.executeJavaScript('display("Hello!")')
-		.then(res => {
-			sketch.UI.message('Connected.')
-		})
-
-	browserWindow.webContents.on('eventEmitted', function(s) {
-		sketch.UI.message(s)
+	browserWindow.webContents.on('requestSymbolCount', function (s) {
+		browserWindow.webContents.executeJavaScript(`updateOutput(${symbols.length})`)
 	})
 }
 

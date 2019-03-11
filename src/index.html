@@ -21,17 +21,25 @@
 	</style>
 
 	<body>
-		<p id="output"></p>
-		<button onclick="emitEvent()">Emit Event</button>
+		<p>Symbols: <span id="output">0</span></p>
+		<button onclick="getSymbolCount()">Update</button>
+
+		<hr>
+
+		<p id="log">
 	</body>
 
 	<script type="text/javascript">
-		window.display = function(message) {
-			document.getElementById('output').innerHTML = message
+		window.updateOutput = function (n) {
+			document.getElementById('output').innerHTML = n
 		}
 
-		function emitEvent() {
-			window.postMessage('eventEmitted', 'Hello there!')
+		window.log = function (message) {
+			document.getElementById('log').innerHTML = message
+		}
+
+		function getSymbolCount() {
+			window.postMessage('requestSymbolCount', 'Requesting...')
 		}
 	</script>
 </html>
